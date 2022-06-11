@@ -1,13 +1,16 @@
 #include <bits/stdc++.h>
 using namespace std;
-// Algoritmo recursivo para calcular Exponenciação Modular Rápida  
-// Baseado no algoritmo disponível em: https://blog.emptyq.net/a?id=00012-cfb2d726-e395-41ed-a840-0401bfb4f0be
 
-#ifndef MODULAR_POWER
-#define MODULAR_POWER
+long long int fat(int n){
+    long long int result = 1;
+    for (long long int i = 2; i <=n; i++){
+        result*=i;
+        result%=1000000007;
+    }
+    return result;
+}
 
-// Terminar de comentar o código
-long long modPow(long long base, long long exp, long long mod) {
+long long int modPow(long long int base, long long exp, long long mod) {
     // Casos base
     if (base == 0) return 0;
     if (exp == 0) return 1;
@@ -26,37 +29,80 @@ long long modPow(long long base, long long exp, long long mod) {
     return ((step + mod) % mod);
 }
 
-#endif
-
-long long int fat(long long int n){
-    
-    long long int result = 1;
-    for (int i=1; i<= n; i++){
-        result*=i;
+long long int power( long long int x,
+                                  long long int y, long long int p)
+{
+    long long int  res = 1; // Initialize result
+ 
+    x = x % p; // Update x if it is more than or
+    // equal to p
+ 
+    while (y > 0)
+    {
+     
+        // If y is odd, multiply x with result
+        if (y & 1)
+            res = (res * x) % p;
+ 
+        // y must be even now
+        y = y >> 1; // y = y/2
+        x = (x * x) % p;
     }
-
-    return result;
+    return res;
 }
+ 
+// Returns n^(-1) mod p
+long long int modInverse(long long int n, 
+                                            int p)
+{
+    return power(n, p - 2, p);
+}
+ 
+// Returns nCr % p using Fermat's little
+// theorem.
+long long int nCrModPFermat(long long int n,
+                                 int r, int p, long long int *fac)
+{
+    // If n<r, then nCr should return 0
+    if (n < r)
+        return 0;
+    // Base case
+    if (r == 0)
+        return 1;
+ 
+    // Fill factorial array so that we
+    // can find all factorial of r, n
+    // and n-r
+ 
+    return (fac[n] * modInverse(fac[r], p) % p
+            * modInverse(fac[n - r], p) % p)
+           % p;
+}
+
+
 
 
 int main(){
     int n,m,k;
-
-
-
     cin >> n >> m >> k;
-
-    int part1 = modPow(m,n, 1000000007);
-
-    for (int i=1; i<=m; i++){
-        if (i != n){
-        cout << fat(m)/(fat(i)*fat(m-i)) << " " << modPow(i,n, 1000000007) << endl;
+    
+    long long int  fatorial[m+2];
+    memset(fatorial,1, sizeof(fatorial));
+    fatorial[0] = 1;
+    for (long long int i = 1; i<m+2; i++){
+        fatorial[i] = (fatorial[i-1]*i)%1000000007;
         
-        part1 -= fat(m)/(fat(i)*fat(m-i))*modPow(i,n, 1000000007);       
-        
-        }
     }
-
-
-    cout << part1 << endl;
-}
+    
+    int fator = 1;
+    if (k%2==0) fator = -1;
+    long long int result = 0;
+    
+    
+    for (int i=1; i<=k; i++){
+        result += fator * (nCrModPFermat(m,i,1000000007, fatorial) * modPow(i,n,1000000007))%1000000007;
+        fator*=-1;
+    }
+    while (result <= 0) result += 1000000007;
+    cout << result << endl;
+    }
