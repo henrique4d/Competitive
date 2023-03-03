@@ -6,30 +6,12 @@ bool compare(long long int a, long long int b){
     return a<b;
 }
 void riffle(vector<long long int> &a, vector<long long int> b, int n){
-    // cout << "B\n";
-    // for (int i=0; i<n; i++){
-    //     cout << b[i] << " ";
-    // }
-    // cout << endl;
-
-
-    // cout << "before riffle\n";
-    // for (int i=0; i<n; i++){
-    //     cout << a[i] << " ";
-    // }
-    // cout << endl;
-
-    vector<bool> done(n, false);
+    
     vector<long long int> newA(n);
 
     for (int i=0; i<n; i++){
         newA[i] = a[b[i]];
     }
-    // cout << "after riffle\n";
-    // for (int i=0; i<n; i++){
-    //     cout << newA[i] << " ";
-    // }
-    // cout << endl;
     a = newA;
 }
 
@@ -67,6 +49,5 @@ int main(){
         cin >> n >> k;
         modPow(n,k);
     }
-    
 }
-
+    

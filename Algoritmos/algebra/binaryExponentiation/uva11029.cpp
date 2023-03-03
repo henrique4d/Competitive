@@ -31,7 +31,6 @@ long long int modDiv(long double a, long long int b){
         a*=a;
         if (a >= 100){
             a/= pow(10,((int)log10(a)-2));
-        
         }
         b/=2;
     }
