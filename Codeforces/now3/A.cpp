@@ -31,38 +31,47 @@ string to_lower(string a) { for (long long int i=0;i<(long long int)a.size();++i
 bool prime(ll a) { if (a==1) return 0; for (long long int i=2;i<=round(sqrt(a));++i) if (a%i==0) return 0; return 1; }
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
-
+ 
 int main(){
-    long long z;
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    int z;
+    //scanf("%d", &z);
     cin >> z;
     while(z--){
-        long long n;
+        int n;
         cin >> n;
-        long long a,b;
-
-        long long cont = 1;
-        long long mdc = -1;
-        long long mmc = -1;
-
+        vector<int> v(n);
         f(i,0,n){
-            cin >> a >> b;
-            
-            if (mmc == -1 and mdc == -1){
-                mdc = a*b;
-                mmc = b;
-            }
-            mdc = __gcd(mdc,a*b);
-            mmc = lcm(mmc,b);
-            //cout << a << " " << b << " " << mdc << " " << mmc << endl;
-            if (mdc%mmc){
-                //cout << "entrou aqui" << endl;
-                cont++;
-                mdc = a*b;
-                mmc = b;
-            }
+            cin >> v[i];
         }
-        cout << cont << endl;
-    }    
-
-    return 0;
+        int resp = 0;
+        
+        int val1 = v[0];
+        int val2 = ~v[0];
+        f(i,1,n){
+            val1= (val1^v[i]);
+            val2 = (val2^(~v[i]));
+        }
+        //cout << val1 << " " << val2 << endl;
+        f(i,0,32){
+            if ((val1&(1<<i)) == 0) continue;
+            if ((val2&(1<<i)) == 0){
+                resp =( resp|(1<<i));
+            }
+            else{
+                cout << -1 << endl;
+                goto here;
+            }
+            
+        }
+        cout << resp << endl;
+        here:
+        int aushdfa;
+        
+    }
+ 
+    
+    
+ 
 }

@@ -31,38 +31,47 @@ string to_lower(string a) { for (long long int i=0;i<(long long int)a.size();++i
 bool prime(ll a) { if (a==1) return 0; for (long long int i=2;i<=round(sqrt(a));++i) if (a%i==0) return 0; return 1; }
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
-
+ 
+ 
+ 
+ 
 int main(){
-    long long z;
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    int z;
+    //scanf("%d", &z);
     cin >> z;
     while(z--){
-        long long n;
+        int n;
+        //scanf("%d", &n);
         cin >> n;
-        long long a,b;
-
-        long long cont = 1;
-        long long mdc = -1;
-        long long mmc = -1;
-
+        vector<long long int> v(n);
+        long long int maior = 0;
         f(i,0,n){
-            cin >> a >> b;
-            
-            if (mmc == -1 and mdc == -1){
-                mdc = a*b;
-                mmc = b;
-            }
-            mdc = __gcd(mdc,a*b);
-            mmc = lcm(mmc,b);
-            //cout << a << " " << b << " " << mdc << " " << mmc << endl;
-            if (mdc%mmc){
-                //cout << "entrou aqui" << endl;
-                cont++;
-                mdc = a*b;
-                mmc = b;
-            }
+            //scanf("%lli", &v[i]);
+            cin >> v[i];
+            maior = max(maior, v[i]);
         }
-        cout << cont << endl;
-    }    
-
-    return 0;
+        sort(all(v));
+        vector<long long int> menores(maior+1, INT_MAX);
+ 
+        ll resp = 0;
+ 
+        f(i,0,n){
+            if (menores[v[i]] == INT_MAX){
+                for (int j=v[i]; j<=maior; j+= v[i]){
+                    menores[j] = min(menores[j], v[i] );
+                    //cout << j << " " << menores[j] << endl;
+                }
+            }
+            resp += menores[v[i]];
+        }
+ 
+        //printf("%lli\n", resp);
+        cout << resp << endl;
+ 
+      
+    }
+    
+ 
 }

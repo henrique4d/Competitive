@@ -31,38 +31,48 @@ string to_lower(string a) { for (long long int i=0;i<(long long int)a.size();++i
 bool prime(ll a) { if (a==1) return 0; for (long long int i=2;i<=round(sqrt(a));++i) if (a%i==0) return 0; return 1; }
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
-
+ 
 int main(){
-    long long z;
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    int z;
+    //scanf("%d", &z);
     cin >> z;
     while(z--){
-        long long n;
+        int n;
         cin >> n;
-        long long a,b;
-
-        long long cont = 1;
-        long long mdc = -1;
-        long long mmc = -1;
-
+        string in;
+        cin >> in;
+        int maior = 0;
+        int menor = INT_MAX;
+        int index = -1;
+        
         f(i,0,n){
-            cin >> a >> b;
-            
-            if (mmc == -1 and mdc == -1){
-                mdc = a*b;
-                mmc = b;
+            if (in[i]-'a' < maior){
+                if (in[i] - 'a' <= menor){
+                    index = i;
+                    menor = in[i]-'a';
+                }
             }
-            mdc = __gcd(mdc,a*b);
-            mmc = lcm(mmc,b);
-            //cout << a << " " << b << " " << mdc << " " << mmc << endl;
-            if (mdc%mmc){
-                //cout << "entrou aqui" << endl;
-                cont++;
-                mdc = a*b;
-                mmc = b;
-            }
+            maior = max(maior, in[i]-'a');
         }
-        cout << cont << endl;
-    }    
+        //cout << index << " " << menor << endl;
 
-    return 0;
+        if (index != -1 and menor <= in[0] - 'a'){
+            cout << (char)(menor+'a');
+            f(i,0,n){
+                if (i!=index)
+                cout << in[i];
+            }
+            cout << endl;
+        }
+        else
+            cout << in << endl;
+
+
+    }
+ 
+    
+    
+ 
 }

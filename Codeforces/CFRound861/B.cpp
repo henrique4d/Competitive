@@ -32,37 +32,54 @@ bool prime(ll a) { if (a==1) return 0; for (long long int i=2;i<=round(sqrt(a));
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
+int get_luck(int n){
+    int maior = 0;
+    int menor = 100;
+
+    while (n){
+        maior = max(maior, n%10);
+        menor = min(menor, n%10);
+        n/=10;
+    }
+
+    return maior-menor;
+}
+
+
+
+
+
 int main(){
-    long long z;
+    int z;
     cin >> z;
     while(z--){
-        long long n;
-        cin >> n;
-        long long a,b;
+        int n, m;
+        cin >> n >> m;
+        vector<vector<long long int>> v(m, vector<long long int>(n));
 
-        long long cont = 1;
-        long long mdc = -1;
-        long long mmc = -1;
-
-        f(i,0,n){
-            cin >> a >> b;
-            
-            if (mmc == -1 and mdc == -1){
-                mdc = a*b;
-                mmc = b;
-            }
-            mdc = __gcd(mdc,a*b);
-            mmc = lcm(mmc,b);
-            //cout << a << " " << b << " " << mdc << " " << mmc << endl;
-            if (mdc%mmc){
-                //cout << "entrou aqui" << endl;
-                cont++;
-                mdc = a*b;
-                mmc = b;
+        for (int i=0; i<n; i++){
+            for (int j=0; j<m; j++){
+                cin >> v[j][i];
             }
         }
-        cout << cont << endl;
-    }    
+        // f(i,0,m){
+        //     print_v(v[i]);
+        //     cout << endl;
+        // }
+        long long int resp = 0;
+        if (n == 1){
+            cout << resp << endl;
+            continue;
+        }
+        f(i,0,m){
+            sort(all(v[i]));
+            
+            for (int j=0; j<n; j++){
+                resp -= (n-1-j)*v[i][j];
+                resp += j*v[i][j];
+            }
+        }
 
-    return 0;
+        cout << resp << endl;
+    }
 }

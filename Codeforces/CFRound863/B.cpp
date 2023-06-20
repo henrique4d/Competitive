@@ -31,38 +31,51 @@ string to_lower(string a) { for (long long int i=0;i<(long long int)a.size();++i
 bool prime(ll a) { if (a==1) return 0; for (long long int i=2;i<=round(sqrt(a));++i) if (a%i==0) return 0; return 1; }
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
-
+ 
 int main(){
-    long long z;
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    int z;
     cin >> z;
     while(z--){
-        long long n;
-        cin >> n;
-        long long a,b;
+        int n, x1,x2,y1,y2;
+        cin >> n >> x1 >> y1 >> x2 >> y2;
 
-        long long cont = 1;
-        long long mdc = -1;
-        long long mmc = -1;
+        ll resp = 0;
+        int meio = n/2;
+        int val1;
+        int val2;
+        int dist_parede1 = 0;
+        int dist_parede2 = 0;
 
-        f(i,0,n){
-            cin >> a >> b;
-            
-            if (mmc == -1 and mdc == -1){
-                mdc = a*b;
-                mmc = b;
-            }
-            mdc = __gcd(mdc,a*b);
-            mmc = lcm(mmc,b);
-            //cout << a << " " << b << " " << mdc << " " << mmc << endl;
-            if (mdc%mmc){
-                //cout << "entrou aqui" << endl;
-                cont++;
-                mdc = a*b;
-                mmc = b;
-            }
+        if (x1 > meio){
+            dist_parede1 = n+1-x1;
         }
-        cout << cont << endl;
-    }    
+        else{
+            dist_parede1 = x1;
+        }
+        if (y1 > meio){
+            dist_parede1 = min(dist_parede1, n+1-y1);
+        }
+        else{
+            dist_parede1 = min(dist_parede1, y1);
+        }
 
-    return 0;
+
+        if (x2 > meio){
+            dist_parede2 = n+1-x2;
+        }
+        else{
+            dist_parede2 = x2;
+        }
+        if (y2 > meio){
+            dist_parede2 = min(dist_parede2, n+1-y2);
+        }
+        else{
+            dist_parede2 = min(dist_parede2, y2);
+        }
+
+        resp = abs(dist_parede1 - dist_parede2);
+        cout << resp << endl;
+    }
 }

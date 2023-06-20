@@ -31,38 +31,53 @@ string to_lower(string a) { for (long long int i=0;i<(long long int)a.size();++i
 bool prime(ll a) { if (a==1) return 0; for (long long int i=2;i<=round(sqrt(a));++i) if (a%i==0) return 0; return 1; }
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
-
+ 
 int main(){
-    long long z;
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    int z;
+    //scanf("%d", &z);
     cin >> z;
     while(z--){
-        long long n;
+        int n;
         cin >> n;
-        long long a,b;
+        vector<long long int> v(n);
+        vector<long long int> L(n);
+        vector<long long int> R(n);
+        
+        for(long long int&x:v) cin >> x;
+        
+        long long int resp = 0;
+        long long int aux;
+        L[0] = v[0];
+            
+        f(i,1,n){
+            L[i] = (L[i-1]*v[i])%MOD;
+        }
 
-        long long cont = 1;
-        long long mdc = -1;
-        long long mmc = -1;
+        R[n-1] = v[n-1];
+        for (int i=n-2; i>=0; i--){
+            R[i] = (R[i+1]*v[i])%MOD;
+        }
 
         f(i,0,n){
-            cin >> a >> b;
+            long long int aux = v[i]-1;
+            if (i > 0){
+                aux*=L[i-1];
+            }
+            aux%=MOD;
+            if (i<n-1){
+                aux*=R[i+1];
+            }
+            aux%=MOD;
+            resp += aux;
+            resp%=MOD;
             
-            if (mmc == -1 and mdc == -1){
-                mdc = a*b;
-                mmc = b;
-            }
-            mdc = __gcd(mdc,a*b);
-            mmc = lcm(mmc,b);
-            //cout << a << " " << b << " " << mdc << " " << mmc << endl;
-            if (mdc%mmc){
-                //cout << "entrou aqui" << endl;
-                cont++;
-                mdc = a*b;
-                mmc = b;
-            }
-        }
-        cout << cont << endl;
-    }    
+        }    
+        cout << resp << endl;
+    }
 
-    return 0;
+    
+    
+ 
 }

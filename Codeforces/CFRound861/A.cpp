@@ -32,37 +32,37 @@ bool prime(ll a) { if (a==1) return 0; for (long long int i=2;i<=round(sqrt(a));
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
+int get_luck(int n){
+    int maior = 0;
+    int menor = 100;
+
+    while (n){
+        maior = max(maior, n%10);
+        menor = min(menor, n%10);
+        n/=10;
+    }
+
+    return maior-menor;
+}
+
 int main(){
-    long long z;
+    int z;
     cin >> z;
     while(z--){
-        long long n;
-        cin >> n;
-        long long a,b;
-
-        long long cont = 1;
-        long long mdc = -1;
-        long long mmc = -1;
-
-        f(i,0,n){
-            cin >> a >> b;
-            
-            if (mmc == -1 and mdc == -1){
-                mdc = a*b;
-                mmc = b;
+        int l, r;
+        cin >> l >> r;
+        int best = 0;
+        int resp = l;
+        int i = l;
+        for (; i<=r; i++){
+            //cout << i << " " << get_luck(i) << endl;
+            if (get_luck(i) > best){
+                best = get_luck(i);
+                resp = i;
             }
-            mdc = __gcd(mdc,a*b);
-            mmc = lcm(mmc,b);
-            //cout << a << " " << b << " " << mdc << " " << mmc << endl;
-            if (mdc%mmc){
-                //cout << "entrou aqui" << endl;
-                cont++;
-                mdc = a*b;
-                mmc = b;
-            }
+            if (best == 9) break;
         }
-        cout << cont << endl;
-    }    
 
-    return 0;
+        cout << resp << endl;
+    }
 }

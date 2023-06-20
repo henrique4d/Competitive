@@ -30,6 +30,7 @@ int main(){
     int z;
     cin >> z;
     int cont = 1;
+    
     while(z--){
         int a,b,c;
         cin >> a >> b >> c;

@@ -31,38 +31,29 @@ string to_lower(string a) { for (long long int i=0;i<(long long int)a.size();++i
 bool prime(ll a) { if (a==1) return 0; for (long long int i=2;i<=round(sqrt(a));++i) if (a%i==0) return 0; return 1; }
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
-
+ 
 int main(){
-    long long z;
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    int z;
     cin >> z;
     while(z--){
-        long long n;
-        cin >> n;
-        long long a,b;
+        int n;
+        int m;
+        cin >> n >> m;
+        string val;
 
-        long long cont = 1;
-        long long mdc = -1;
-        long long mmc = -1;
-
+        cin >> val;
         f(i,0,n){
-            cin >> a >> b;
-            
-            if (mmc == -1 and mdc == -1){
-                mdc = a*b;
-                mmc = b;
+            if (m > val[i] - '0'){
+                cout << m;
+                m = -1;
+                i--;
             }
-            mdc = __gcd(mdc,a*b);
-            mmc = lcm(mmc,b);
-            //cout << a << " " << b << " " << mdc << " " << mmc << endl;
-            if (mdc%mmc){
-                //cout << "entrou aqui" << endl;
-                cont++;
-                mdc = a*b;
-                mmc = b;
-            }
+            else cout << val[i];
         }
-        cout << cont << endl;
-    }    
+        if (m!=-1) cout << m;
 
-    return 0;
+        cout << endl;
+    }
 }

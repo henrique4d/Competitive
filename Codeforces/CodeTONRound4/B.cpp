@@ -33,36 +33,37 @@ void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
 int main(){
-    long long z;
+    int z;
     cin >> z;
     while(z--){
-        long long n;
+        int n;
         cin >> n;
-        long long a,b;
-
-        long long cont = 1;
-        long long mdc = -1;
-        long long mmc = -1;
-
-        f(i,0,n){
-            cin >> a >> b;
-            
-            if (mmc == -1 and mdc == -1){
-                mdc = a*b;
-                mmc = b;
-            }
-            mdc = __gcd(mdc,a*b);
-            mmc = lcm(mmc,b);
-            //cout << a << " " << b << " " << mdc << " " << mmc << endl;
-            if (mdc%mmc){
-                //cout << "entrou aqui" << endl;
-                cont++;
-                mdc = a*b;
-                mmc = b;
-            }
+        if (n%2 == 0){
+            cout << -1 << endl;
+            continue;
         }
-        cout << cont << endl;
-    }    
+        vector<int> resp;
+        int pot = log2(n);
 
-    return 0;
+        int atual = pow(2,pot);
+        pot--;
+        while(pot >= 0){
+            if (atual < n){
+                resp.pb(2);
+                atual += pow(2,pot);
+            }
+            else{
+                resp.pb(1);
+                atual -= pow(2,pot);
+            }
+            pot--;
+        }
+
+        cout << resp.size() << endl;
+        f(i,0,resp.size()){
+            if (i) cout << " ";
+            cout << resp[i];
+        }
+        cout << endl;
+    }
 }

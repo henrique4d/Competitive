@@ -32,37 +32,43 @@ bool prime(ll a) { if (a==1) return 0; for (long long int i=2;i<=round(sqrt(a));
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
+long long int l,r;
+long long int resp = 0;
+
+bool teste(long long int n, int a,int b){
+    //cout << n << " " << l << " " << r << endl;
+    
+    if (n >= l and n<= r){
+        resp = n;
+        //cout << n << " " << l << " " << r  << endl;
+        return true;
+    }
+    if (n > r) return false;
+
+    return (teste(n*10 + a, a,b ) or teste(n*10 + b,a,b));
+}
+
+
 int main(){
-    long long z;
+    int z;
     cin >> z;
     while(z--){
-        long long n;
-        cin >> n;
-        long long a,b;
-
-        long long cont = 1;
-        long long mdc = -1;
-        long long mmc = -1;
-
-        f(i,0,n){
-            cin >> a >> b;
-            
-            if (mmc == -1 and mdc == -1){
-                mdc = a*b;
-                mmc = b;
-            }
-            mdc = __gcd(mdc,a*b);
-            mmc = lcm(mmc,b);
-            //cout << a << " " << b << " " << mdc << " " << mmc << endl;
-            if (mdc%mmc){
-                //cout << "entrou aqui" << endl;
-                cont++;
-                mdc = a*b;
-                mmc = b;
+        cin >> l >> r;
+        long long int final;
+        long long int diff = 10;
+        for (int a = 1; a<=9; a++){
+        
+            for (int b = 0; b<=a; b++){
+                if (teste(a,a,b) or ((b != 0 and teste(b,a,b)))){
+                    if (a-b < diff){
+                        diff = a-b;
+                        final = resp;
+                    }
+                }
+                //cout << "////////////\n";
             }
         }
-        cout << cont << endl;
-    }    
 
-    return 0;
+        cout << final << endl;
+    }
 }

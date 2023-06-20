@@ -31,38 +31,50 @@ string to_lower(string a) { for (long long int i=0;i<(long long int)a.size();++i
 bool prime(ll a) { if (a==1) return 0; for (long long int i=2;i<=round(sqrt(a));++i) if (a%i==0) return 0; return 1; }
 void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
-
+ 
 int main(){
-    long long z;
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    int z;
+    //scanf("%d", &z);
     cin >> z;
     while(z--){
-        long long n;
-        cin >> n;
-        long long a,b;
-
-        long long cont = 1;
-        long long mdc = -1;
-        long long mmc = -1;
-
+        int n,m;
+        cin >> n >> m;
+        vector<ll> coeficientes(n);
         f(i,0,n){
-            cin >> a >> b;
-            
-            if (mmc == -1 and mdc == -1){
-                mdc = a*b;
-                mmc = b;
-            }
-            mdc = __gcd(mdc,a*b);
-            mmc = lcm(mmc,b);
-            //cout << a << " " << b << " " << mdc << " " << mmc << endl;
-            if (mdc%mmc){
-                //cout << "entrou aqui" << endl;
-                cont++;
-                mdc = a*b;
-                mmc = b;
-            }
+            cin >> coeficientes[i];
         }
-        cout << cont << endl;
-    }    
 
-    return 0;
+        sort(all(coeficientes));
+        long long int a,b,c;
+        f(i,0,m){
+            cin >> a >> b >> c;
+            auto it = lower_bound(coeficientes.begin(), coeficientes.end(), b);
+            int index = it-coeficientes.begin();
+            int index2 = -1;
+            if (index > 0){
+                index2 = index-1;
+            }
+
+            if (index < n and (b-coeficientes[index])*(b-coeficientes[index]) < 4*a*c){
+                yes();
+                cout << coeficientes[index] << endl;
+                continue;
+            }
+            if (index2 != -1 and (b-coeficientes[index2])*(b-coeficientes[index2]) < 4*a*c){
+                yes();
+                cout << coeficientes[index2] << endl;
+                continue;
+            }
+            no();
+        }
+        if (z)
+        cout << endl;
+
+    }
+ 
+    
+    
+ 
 }

@@ -33,36 +33,21 @@ void yes() { cout<<"YES\n"; }
 void no() { cout<<"NO\n"; }
 
 int main(){
-    long long z;
+    int z;
     cin >> z;
     while(z--){
-        long long n;
+        int n;
         cin >> n;
-        long long a,b;
-
-        long long cont = 1;
-        long long mdc = -1;
-        long long mmc = -1;
-
+        int cont = 1;
+        int aux;
+        bool possible = false;
         f(i,0,n){
-            cin >> a >> b;
-            
-            if (mmc == -1 and mdc == -1){
-                mdc = a*b;
-                mmc = b;
-            }
-            mdc = __gcd(mdc,a*b);
-            mmc = lcm(mmc,b);
-            //cout << a << " " << b << " " << mdc << " " << mmc << endl;
-            if (mdc%mmc){
-                //cout << "entrou aqui" << endl;
-                cont++;
-                mdc = a*b;
-                mmc = b;
-            }
+            cin >> aux;
+            if (aux <= cont) possible = true;
+            cont++;
         }
-        cout << cont << endl;
-    }    
 
-    return 0;
+        if (possible) yes();
+        else no();
+    }
 }
