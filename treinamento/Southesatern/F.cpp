@@ -62,7 +62,6 @@ void solve(){
         }
         poisons.push_back(poison_damage);
     }
-
     ll final = dano - cura;
     sort(all(poisons), greater<ll>());
     for (int i=0; i<k; i++){
