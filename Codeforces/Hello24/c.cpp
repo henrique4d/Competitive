@@ -21,7 +21,7 @@ typedef pair<ll,ll> pii;
 #define INF 0x3f3f3f3f
 #define INFLL 0x3f3f3f3f3f3f3f3fLL
  
-#define mod 1000000007LL
+#define mod 998244353LL
  
 #define f(i,s,e) for(long long ll i=s;i<e;i++)
 template <class T>
@@ -32,7 +32,7 @@ ll lcm(ll a,ll b) { return a/gcd(a,b)*b; }
 string to_upper(string a) { for (long long int i=0;i<(long long int)a.size();++i) if (a[i]>='a' && a[i]<='z') a[i]-='a'-'A'; return a; }
 string to_lower(string a) { for (long long int i=0;i<(long long int)a.size();++i) if (a[i]>='A' && a[i]<='Z') a[i]+='a'-'A'; return a; }
 void yes() { cout<<"YES\n"; }
-bool prime(ll a) { if (a==1) return 0; for (long long int i=2;i<=round(sqrt(a));++i) if (a%i==0) return 0; return 1; }
+//bool prime(ll a) { if (a==1) return 0; for (long long ll i=2;i<=round(sqrt(a));++i) if (a%i==0) return 0; return 1; }
 void no() { cout<<"NO\n"; }
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
  
@@ -43,24 +43,17 @@ mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 /* -------------------------------- Solution starts below -------------------------------- */ 
 const ll MAXN = 2e5 + 10;
 ll a[MAXN];
-ll b[MAXN];
 
 void solve(){
-    ll n, cont, portempo, desligar;
-    cin >> n >> cont >> portempo >> desligar;
-    
-    a[0] = 0;
-    for (int i=1; i<=n; i++){
+    int n;
+    cin >> n;
+    ll menor = INFLL;
+    ll cont = 0;
+    for (int i=0; i<n; i++){
         cin >> a[i];
+        if (i and a[i] > a[i-1]) cont++;
     }
-    for (int i=1; i<=n; i++){
-        cont -= min((a[i]-a[i-1])*portempo,desligar);
-        if (cont <= 0){
-            no();
-            return;
-        }
-    }
-    yes();
+
 }
 
 int main() {

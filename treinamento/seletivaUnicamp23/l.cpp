@@ -41,32 +41,57 @@ mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 // #endif
  
 /* -------------------------------- Solution starts below -------------------------------- */ 
-const ll MAXN = 2e5 + 10;
-ll a[MAXN];
-ll b[MAXN];
+
+const ll MAXN = 4e5 + 10;
+pair<pair<ll,ll>,ll> a[MAXN];
 
 void solve(){
-    ll n, cont, portempo, desligar;
-    cin >> n >> cont >> portempo >> desligar;
-    
-    a[0] = 0;
-    for (int i=1; i<=n; i++){
-        cin >> a[i];
+    int n;
+    cin >> n;
+
+    for (int i=0; i<n; i++){
+        cin >> a[i].first.first;
+        a[i].first.second = 0;
+        a[i].second = i;
+        cin >> a[i+n].first.first;
+        a[i+n].first.second = 1;
+        a[i+n].second = i;
     }
-    for (int i=1; i<=n; i++){
-        cont -= min((a[i]-a[i-1])*portempo,desligar);
-        if (cont <= 0){
-            no();
+    sort(a, a+2*n);
+    ll maior = 0;
+    ll atual = 0;
+    for (int i=0; i<2*n; i++){
+        if (a[i].first.second) atual--;
+        else atual++;
+        maior = max(maior, atual);
+    }
+    cout << maior << endl;
+    set<ll> s;
+    atual = 0;
+    for (int i=0; i<2*n; i++){
+        if (a[i].first.second){
+            atual--;
+            s.erase(a[i].second);
+        }
+        else{
+            atual++;
+                s.insert(a[i].second);
+        }
+        
+        if (atual == maior){
+            for (auto it = s.begin(); it!=s.end(); it++){
+                cout << *it + 1 << " ";
+            }
+            cout << endl;
             return;
         }
     }
-    yes();
 }
 
 int main() {
     optimize; 
     ll T = 1;
-    cin >> T;
+    //cin >> T;
     while(T--) {
         solve();
     }

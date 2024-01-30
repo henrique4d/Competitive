@@ -42,31 +42,40 @@ mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
  
 /* -------------------------------- Solution starts below -------------------------------- */ 
 const ll MAXN = 2e5 + 10;
-ll a[MAXN];
-ll b[MAXN];
+pair<ll,ll> a[MAXN];
+ll mult[MAXN];
+
+bool visited[MAXN];
+
 
 void solve(){
-    ll n, cont, portempo, desligar;
-    cin >> n >> cont >> portempo >> desligar;
-    
-    a[0] = 0;
-    for (int i=1; i<=n; i++){
-        cin >> a[i];
+    int n, soma;
+    cin >> n >> soma;
+    int minimo = 0;
+    int maximo = 0;
+    int l,r;
+    for (int i=0; i<n; i++){
+        cin >> l >> r;
+        minimo += l;
+        maximo += r;
+        a[i] = {l,r};
     }
-    for (int i=1; i<=n; i++){
-        cont -= min((a[i]-a[i-1])*portempo,desligar);
-        if (cont <= 0){
-            no();
-            return;
+    if (soma >= minimo and soma <=maximo){
+        yes();
+        int sobra = soma - minimo;
+        for (int i=0; i<n; i++){
+            cout << min(a[i].first + sobra, a[i].second) << " ";
+            sobra -= min(a[i].first + sobra, a[i].second) - a[i].first;
         }
+        cout << endl;
     }
-    yes();
+    else no();
 }
 
 int main() {
     optimize; 
     ll T = 1;
-    cin >> T;
+    //cin >> T;
     while(T--) {
         solve();
     }

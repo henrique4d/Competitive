@@ -41,26 +41,80 @@ mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 // #endif
  
 /* -------------------------------- Solution starts below -------------------------------- */ 
-const ll MAXN = 2e5 + 10;
-ll a[MAXN];
-ll b[MAXN];
+
+const ll MAXN = 3e5+10;
+pair<ll,ll> a[MAXN];
 
 void solve(){
-    ll n, cont, portempo, desligar;
-    cin >> n >> cont >> portempo >> desligar;
-    
-    a[0] = 0;
-    for (int i=1; i<=n; i++){
-        cin >> a[i];
+    int n;
+    cin >> n;
+    vector<bool> used(n+10, false);
+    for (int i=0; i<n; i++){
+        cin >> a[i].first;
+        used[i] = false;
     }
-    for (int i=1; i<=n; i++){
-        cont -= min((a[i]-a[i-1])*portempo,desligar);
-        if (cont <= 0){
-            no();
-            return;
+    list<pair<pair<ll,ll>,ll>> l;
+    l.push_back({{0, INFLL}, 0});
+    l.push_back({{0, INFLL}, 0});
+
+    queue<list<pair<pair<ll,ll>,ll>>::iterator> q;
+    for (int i=0; i<n; i++){
+        cin >> a[i].second;
+        l.push_back({{a[i].first, a[i].second}, i+3});
+    }
+
+    l.push_back({{0, INFLL}, n+5});
+    l.push_back({{0, INFLL}, n+6});
+
+    for (auto it = l.begin(); it!= l.end(); it++){
+        if (it->first.second == INFLL) continue;
+        auto itprev = it;
+        auto itnext = it;
+        itprev--;
+        itnext++;
+        if (itprev->first.first + itnext->first.first > it->first.second){
+            q.push(it);
+            used[it->second] = true;
         }
     }
-    yes();
+
+    queue<list<pair<pair<ll,ll>,ll>>::iterator> check;
+    
+    for (int i=0; i<n; i++){
+        cout << q.size() << " ";
+        ll tam = q.size();
+        while(tam--){
+            auto it1 = q.front();
+            auto it2 = q.front();
+            it1--;
+            it2++;
+            if (!used[it1->second]) check.push(it1);
+            if (!used[it2->second]) check.push(it2);
+            used[q.front()->second]= true;
+            
+            l.erase(q.front());
+            q.pop();
+        }
+
+        while (!check.empty()){
+            auto it = check.front();
+            check.pop();
+            if (used[it->second]) continue;
+            auto itprev = it;
+            auto itnext = it;
+            itprev--;
+            itnext++;
+
+            if (itprev->first.first + itnext->first.first > it->first.second and !used[it->second]){
+                q.push(it);
+                used[it->second] = true;
+            }
+        }
+
+        
+    }
+    cout << endl;
+
 }
 
 int main() {

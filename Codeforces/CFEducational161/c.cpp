@@ -9,7 +9,7 @@ typedef long double ld;
 typedef pair<ll,ll> pii;
  
 #define optimize ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
-#define endl "\n"
+// #define endl "\n"
  
 #define fi first 
 #define se second 
@@ -41,30 +41,53 @@ mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 // #endif
  
 /* -------------------------------- Solution starts below -------------------------------- */ 
-const ll MAXN = 2e5 + 10;
+
+const ll MAXN = 3e5+10;
 ll a[MAXN];
-ll b[MAXN];
 
 void solve(){
-    ll n, cont, portempo, desligar;
-    cin >> n >> cont >> portempo >> desligar;
-    
-    a[0] = 0;
-    for (int i=1; i<=n; i++){
-        cin >> a[i];
+    ll x;
+    cin >> x;
+    x--;
+
+    stack<vector<ll>> s;
+    ll cont = 1;
+    ll val_atual = 0;
+    vector<ll> val(100, 0);
+    stack<ll> aux;
+    vector<ll> resp;
+
+    while (val_atual*2 + 1 <= x){
+        val_atual*=2;
+        val_atual++;
+        resp.push_back(cont);
+        val[cont] = val_atual+1;
+        cont++;
     }
-    for (int i=1; i<=n; i++){
-        cont -= min((a[i]-a[i-1])*portempo,desligar);
-        if (cont <= 0){
-            no();
-            return;
+
+    x -= val_atual;
+    //cont--;
+    //cout << x << " " << val_atual << " " << cont << endl;
+    while (x > 0){
+        while (val_atual+1 <= x){
+            x -= val_atual+1;
+            resp.push_back(cont);
         }
+        val_atual--;
+        val_atual/=2;
+        cont--;
     }
-    yes();
+
+    cout << resp.size() << endl;
+    for (int i=0; i<resp.size(); i++){
+        cout << resp[i] << " ";
+    }
+
+    cout << endl;
 }
 
 int main() {
-    optimize; 
+    // optimize; 
     ll T = 1;
     cin >> T;
     while(T--) {

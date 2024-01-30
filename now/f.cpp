@@ -41,26 +41,56 @@ mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 // #endif
  
 /* -------------------------------- Solution starts below -------------------------------- */ 
-const ll MAXN = 2e5 + 10;
+const ll MAXN = 1e5 + 10;
 ll a[MAXN];
-ll b[MAXN];
+
+pair<ll,ll> pre[400][MAXN];
+
 
 void solve(){
-    ll n, cont, portempo, desligar;
-    cin >> n >> cont >> portempo >> desligar;
-    
-    a[0] = 0;
-    for (int i=1; i<=n; i++){
+    ll n,q;
+    cin >> n >> q;
+    // cout << n << " " << q << endl;
+
+    for (ll i=1; i<=n; i++){
         cin >> a[i];
-    }
-    for (int i=1; i<=n; i++){
-        cont -= min((a[i]-a[i-1])*portempo,desligar);
-        if (cont <= 0){
-            no();
-            return;
+        // cout << a[i] << " ";
+    }    
+    // cout << endl;
+    for (ll d=1; d*d <= n; d++){
+        for (int i=1; i<=n; i++){
+            if (i-d > 0) pre[d][i] = pre[d][i-d];
+            else pre[d][i] = {0,0};
+            pre[d][i].first += ((i+d-1)/d)*a[i];
+            pre[d][i].second += a[i];
+            // cout << d << " " << i << " " << pre[d][i] << endl;
         }
     }
-    yes();
+
+    ll s,d,k;
+    for (int i=0; i<q; i++){
+        cin >> s >> d >> k;
+        if ( d*d <= n){
+            pair<ll,ll> resp;            
+            k--;
+            resp.first = pre[d][s + k*d].first;
+            resp.second = pre[d][s + k*d].second;
+            if (s - d > 0){
+                resp.first -= pre[d][s - d].first;
+                resp.second -= pre[d][s - d].second;
+            }
+            // cout << resp << endl;
+            cout << resp.first - ((s+d-1)/(d) - 1) *resp.second << " ";
+        }
+        else{
+            ll resp = 0;
+            for (int j=0; j<k; j++){
+                resp += a[s + d*j]*(j+1);
+            }
+            cout << resp << " ";
+        }
+    }
+    cout << endl;
 }
 
 int main() {

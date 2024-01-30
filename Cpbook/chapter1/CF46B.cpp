@@ -41,32 +41,54 @@ mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 // #endif
  
 /* -------------------------------- Solution starts below -------------------------------- */ 
-const ll MAXN = 2e5 + 10;
-ll a[MAXN];
-ll b[MAXN];
+
+
 
 void solve(){
-    ll n, cont, portempo, desligar;
-    cin >> n >> cont >> portempo >> desligar;
-    
-    a[0] = 0;
-    for (int i=1; i<=n; i++){
-        cin >> a[i];
+    map <string,ll> a;
+    //S, M, L, XL and XXL
+    a["S"] = 1;
+    a["M"] = 2;
+    a["L"] = 3;
+    a["XL"] = 4;
+    a["XXL"] = 5;
+    map <ll, string> b;
+    b[1] = "S";
+    b[2] = "M";
+    b[3] = "L";
+    b[4] = "XL";
+    b[5] = "XXL";
+
+    vector<ll> cont(6);
+    for (int i=1; i<=5; i++){
+        cin >> cont[i];
     }
-    for (int i=1; i<=n; i++){
-        cont -= min((a[i]-a[i-1])*portempo,desligar);
-        if (cont <= 0){
-            no();
-            return;
+
+    int n;
+    cin >> n;
+    string x;
+    for (int i=0; i<n; i++){
+        cin >> x;
+        int val = a[x];
+        for (int j=0; j<5; j++){
+            if (val + j < 6 and cont[val+j]){
+                cont[val+j]--;
+                cout << b[val+j] << endl;
+                break;
+            }
+            if (val - j >= 1 and cont[val-j]){
+                cont[val-j]--;
+                cout << b[val-j] << endl;
+                break;
+            }
         }
     }
-    yes();
 }
 
 int main() {
     optimize; 
     ll T = 1;
-    cin >> T;
+    //cin >> T;
     while(T--) {
         solve();
     }

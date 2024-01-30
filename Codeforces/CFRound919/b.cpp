@@ -42,25 +42,33 @@ mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
  
 /* -------------------------------- Solution starts below -------------------------------- */ 
 const ll MAXN = 2e5 + 10;
-ll a[MAXN];
-ll b[MAXN];
+ll v[MAXN];
+
 
 void solve(){
-    ll n, cont, portempo, desligar;
-    cin >> n >> cont >> portempo >> desligar;
-    
-    a[0] = 0;
-    for (int i=1; i<=n; i++){
-        cin >> a[i];
+    int n,a,b;
+    cin >> n >> b >> a;
+    ll soma = 0;
+    for (ll i=0; i<n; i++){
+        cin >> v[i];
+        soma += v[i];
     }
-    for (int i=1; i<=n; i++){
-        cont -= min((a[i]-a[i-1])*portempo,desligar);
-        if (cont <= 0){
-            no();
-            return;
-        }
+    sort(v, v+n);
+    ll best = -INFLL;
+    ll remove = 0;
+    for (int i=n-1; i> n-1-a and i >= 0; i--){
+        remove += 2*v[i];
     }
-    yes();
+    // cout << remove << endl;
+    best = max(best, soma-remove);
+    for (int j=n-1; j> n-1-b and j>=0; j--){
+        remove -= v[j];
+        if (j-a >= 0) remove += 2*v[j-a];
+        best = max(best, soma-remove);
+        // cout << j << " " << remove << endl;
+
+    }
+    cout << best << endl;
 }
 
 int main() {

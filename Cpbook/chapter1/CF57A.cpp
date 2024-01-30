@@ -41,32 +41,52 @@ mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 // #endif
  
 /* -------------------------------- Solution starts below -------------------------------- */ 
-const ll MAXN = 2e5 + 10;
-ll a[MAXN];
-ll b[MAXN];
+
 
 void solve(){
-    ll n, cont, portempo, desligar;
-    cin >> n >> cont >> portempo >> desligar;
-    
-    a[0] = 0;
-    for (int i=1; i<=n; i++){
-        cin >> a[i];
+    int n;
+    cin >> n;
+    int x1,y1,x2,y2;
+    cin >> x1 >> y1 >> x2 >> y2;
+    if ((x1 == 0 and x2 == 0) or (x1 == n and x2 == n) or (y1 == 0 and y2 == 0) or (y1 ==n  and y2 == n)){
+        cout << abs(x2-x1) + abs(y2-y1) << endl;
     }
-    for (int i=1; i<=n; i++){
-        cont -= min((a[i]-a[i-1])*portempo,desligar);
-        if (cont <= 0){
-            no();
-            return;
-        }
+    else if (x1 == 0 and x2 != n){
+        cout << x2 + abs(y2 - y1) << endl;
     }
-    yes();
+    else if (x2 == 0 and x1 != n){
+        cout << x1 + abs(y1-y2) << endl;
+    }
+    else if (y1 == 0 and y2 != n){
+        cout << y2 + abs(x2 - x1) << endl;
+    }
+    else if (y2 == 0 and y1 != n){
+        cout << y1 + abs(x1-x2) << endl;
+    }
+    else if (x1 == n and x2 != 0){
+        cout << n-x2 + abs(y2 - y1) << endl;
+    }
+    else if (x2 == n and x1 != 0){
+        cout << n-x1 + abs(y1-y2) << endl;
+    }
+    else if (y1 == n and y2 != 0){
+        cout << n-y2 + abs(x2 - x1) << endl;
+    }
+    else if (y2 == n and y1 != 0){
+        cout << n-y1 + abs(x1-x2) << endl;
+    }
+    else if (x1 == 0 or x2 == 0){
+        cout << n + min(y1 + y2, 2*n-y1-y2) << endl;
+    }
+    else if (y1 == 0 or y2 == 0){
+        cout << n + min(x1 +x2, 2*n - x1-x2) << endl;
+    }
 }
 
 int main() {
     optimize; 
     ll T = 1;
-    cin >> T;
+    //cin >> T;
     while(T--) {
         solve();
     }

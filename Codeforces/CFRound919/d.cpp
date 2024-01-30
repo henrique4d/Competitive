@@ -43,24 +43,46 @@ mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 /* -------------------------------- Solution starts below -------------------------------- */ 
 const ll MAXN = 2e5 + 10;
 ll a[MAXN];
-ll b[MAXN];
 
 void solve(){
-    ll n, cont, portempo, desligar;
-    cin >> n >> cont >> portempo >> desligar;
+    int n, q;
+    cin >> n >> q;
+    vector<pair<ll,ll>> op(n);
+    vector<pair<ll,ll>> query(q);
+    vector<ll> resp(q);
     
-    a[0] = 0;
-    for (int i=1; i<=n; i++){
-        cin >> a[i];
+
+    for (int i=0; i<n; i++){
+        cin >> op[i].first >> op[i].second;
     }
-    for (int i=1; i<=n; i++){
-        cont -= min((a[i]-a[i-1])*portempo,desligar);
-        if (cont <= 0){
-            no();
-            return;
+    for (int i=0; i<q; i++){
+        cin >> query[i].first;
+        query[i].second = i;
+    }
+
+    sort(all(query));
+
+    ll lastElement = -1;
+    ll lastsize = 0;
+    int j = 0;
+
+    for (int i=0; i<n; i++){
+        if (op[i].first == 1){
+            lastElement = op[i].second;
+            lastsize++;
         }
+        else{
+            lastsize *= op[i].second;
+        }
+
+        while (j < q and query[j].first <= lastsize){
+            resp[query[j].second] = lastElement;
+            j++;
+        }
+        cout << i << " " << op[i] << " " << lastElement << " " << lastsize << endl;
     }
-    yes();
+    cout << resp << endl;
+    
 }
 
 int main() {

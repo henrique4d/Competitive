@@ -41,32 +41,33 @@ mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 // #endif
  
 /* -------------------------------- Solution starts below -------------------------------- */ 
-const ll MAXN = 2e5 + 10;
-ll a[MAXN];
-ll b[MAXN];
+
 
 void solve(){
-    ll n, cont, portempo, desligar;
-    cin >> n >> cont >> portempo >> desligar;
-    
-    a[0] = 0;
-    for (int i=1; i<=n; i++){
-        cin >> a[i];
-    }
-    for (int i=1; i<=n; i++){
-        cont -= min((a[i]-a[i-1])*portempo,desligar);
-        if (cont <= 0){
-            no();
-            return;
+    string s;
+    getline(cin, s);
+    vector<bool> space(s.size(), false);
+    bool letra = false;
+    for (int i=s.size()-1; i>=0; i--){
+        if (s[i] == '.' or s[i] == ',' or s[i] == '?' or s[i] == '!'){
+            space[i] = true;
+            letra = false;
         }
+        if (s[i] == ' ' and letra and  i and s[i-1] >= 'a' and s[i-1] <= 'z') space[i] = true;
+        if (s[i] >= 'a' and s[i] <= 'z') letra = true;
+
     }
-    yes();
+    for (int i=0; i<s.size(); i++){
+        if (s[i] != ' ') cout << s[i];
+        if (space[i]) cout << ' ';
+    }
+    cout << endl;
 }
 
 int main() {
     optimize; 
     ll T = 1;
-    cin >> T;
+    //cin >> T;
     while(T--) {
         solve();
     }

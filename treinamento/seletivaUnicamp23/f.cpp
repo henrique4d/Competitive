@@ -41,32 +41,57 @@ mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 // #endif
  
 /* -------------------------------- Solution starts below -------------------------------- */ 
-const ll MAXN = 2e5 + 10;
-ll a[MAXN];
-ll b[MAXN];
+
+const ll MAXN = 3e5 + 10;
+vector <pair<ll,ll>> adj[MAXN];
+bool visited[MAXN];
+vector<ll> ida[MAXN];
+
+void print(int pos){
+    cout << pos << " ";
+    for (auto v:ida[pos]){
+        print(v);
+        cout << pos << " ";
+    }
+}
 
 void solve(){
-    ll n, cont, portempo, desligar;
-    cin >> n >> cont >> portempo >> desligar;
-    
-    a[0] = 0;
-    for (int i=1; i<=n; i++){
-        cin >> a[i];
+    int n,m;
+    cin >> n >> m;
+    ll u,v,c;
+    for (int i=0; i<m; i++){
+        cin >> u >> v >> c;
+        adj[u].push_back({v,c});
+        adj[v].push_back({u,c});
     }
-    for (int i=1; i<=n; i++){
-        cont -= min((a[i]-a[i-1])*portempo,desligar);
-        if (cont <= 0){
-            no();
-            return;
+    priority_queue<pair<ll,pair<ll,ll>>> pq;
+    pq.push({0,{1, 0}});
+    ll total = 0;
+    while(!pq.empty()){
+        ll u = pq.top().second.first;
+        ll origin = pq.top().second.second;
+        ll cost = pq.top().first;
+        pq.pop();
+        if (visited[u]) continue;
+        visited[u] = true;
+        total += cost;
+        ida[origin].push_back(u);
+        for (auto v:adj[u]){
+            if (!visited[v.first]){
+                pq.push({-v.second, {v.first,u}});
+            }
         }
     }
-    yes();
+    cout << total*-2 << endl;
+    cout << 2*n-1 << endl;
+    print(1);
+    cout << endl;
 }
 
 int main() {
     optimize; 
     ll T = 1;
-    cin >> T;
+    //cin >> T;
     while(T--) {
         solve();
     }

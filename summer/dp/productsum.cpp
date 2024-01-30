@@ -41,32 +41,101 @@ mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 // #endif
  
 /* -------------------------------- Solution starts below -------------------------------- */ 
+
+struct Line {
+    int64_t a,b, x_inter;
+    bool operator <(int64_t x) const {
+        return x_inter < x;
+    }
+};
+deque<Line> cht;
+
+int64_t intersection(Line x, Line y){
+    assert(x.a != y.a);
+    return (x.b - y.b)/(y.a - x.a);
+}
+
+void add_line_back(int64_t a, int64_t b){
+    if (!cht.empty() and cht.back().a == a) cht.pop_back();
+
+    while (cht.size() >= 2){
+        auto x = cht[cht.size() - 2];
+        auto y = cht[cht.size() - 1];
+        if (intersection(y, {a,b,0}) < intersection(x,y)){
+            cht.pop_back();
+        }
+        else break;
+    }
+    if (!cht.empty()){
+        cht.back().x_inter = intersection(cht.back(), {a,b,0});
+    }
+    cht.push_back({a,b, INFLL});
+}
+
+int64_t query(int64_t x){
+    int j = lower_bound(cht.begin(), cht.end(), x) - cht.begin();
+    return cht[j].a*x + cht[j].b;
+}
+
+
+void add_line_front(int64_t a, int64_t b){
+    if (!cht.empty() and cht[0].a == a) return;
+    while (cht.size() >= 2){
+        a   uto x = cht[0];
+        auto y = cht[1];
+        if (intersection (x, {a,b,0}) > intersection(x,y)){
+            cht.pop_front();
+        }
+        else break;
+    }
+    cht.push_front({a,b,INFLL});
+    if (cht.size() > 1){
+        cht[0].x_inter = intersection(cht[0], cht[1]);
+    }
+}
+
 const ll MAXN = 2e5 + 10;
-ll a[MAXN];
-ll b[MAXN];
+int64_t prefixsum[MAXN];
+int64_t a[MAXN];
+
 
 void solve(){
-    ll n, cont, portempo, desligar;
-    cin >> n >> cont >> portempo >> desligar;
-    
-    a[0] = 0;
+    int n;
+    cin >> n;
+    ll total = 0;
     for (int i=1; i<=n; i++){
         cin >> a[i];
+        total += a[i]*i;
+        prefixsum[i] = prefixsum[i-1] + a[i];
     }
+
+    add_line_back(1, -prefixsum[0]);
+
+    int64_t best = 0;
     for (int i=1; i<=n; i++){
-        cont -= min((a[i]-a[i-1])*portempo,desligar);
-        if (cont <= 0){
-            no();
-            return;
-        }
+        best = max(best, prefixsum[i-1] - a[i]*i + query(a[i]));
+        add_line_back(i,-prefixsum[i-1]);
     }
-    yes();
+
+    cht.clear();
+
+    add_line_front(n, -prefixsum[n]);
+    for (int i=n; i>=1; i--){
+        best = max(best, prefixsum[i] - a[i]*i + query(a[i]));
+        add_line_front(i,-prefixsum[i]); 
+    }
+
+
+    cout << total + best << endl;
+
+
+
 }
 
 int main() {
     optimize; 
     ll T = 1;
-    cin >> T;
+    //cin >> T;
     while(T--) {
         solve();
     }

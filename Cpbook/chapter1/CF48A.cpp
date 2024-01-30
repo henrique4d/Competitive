@@ -41,32 +41,42 @@ mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 // #endif
  
 /* -------------------------------- Solution starts below -------------------------------- */ 
-const ll MAXN = 2e5 + 10;
-ll a[MAXN];
-ll b[MAXN];
+
+
 
 void solve(){
-    ll n, cont, portempo, desligar;
-    cin >> n >> cont >> portempo >> desligar;
-    
-    a[0] = 0;
-    for (int i=1; i<=n; i++){
-        cin >> a[i];
+    int rock = 0;
+    int paper = 0;
+    int scissors = 0;
+    string play[3];
+    string winner = "-";
+    for (int i=0; i<3; i++){
+        cin >> play[i];
+        if (play[i] == "rock") rock++;
+        if (play[i] == "paper") paper++;
+        if (play[i] == "scissors") scissors++;
     }
-    for (int i=1; i<=n; i++){
-        cont -= min((a[i]-a[i-1])*portempo,desligar);
-        if (cont <= 0){
-            no();
-            return;
-        }
+    if (rock == 1 and scissors == 2) winner = "rock";
+    if (paper == 1 and rock == 2) winner = "paper";
+    if (scissors == 1 and paper == 2) winner = "scissors";
+
+    if (play[0] == winner){
+        cout << "F\n";
     }
-    yes();
+    else if (play[1] == winner){
+        cout << "M\n";
+    }
+    else if (play[2] == winner){
+        cout << "S\n";
+    }
+    else cout << "?\n";
+
 }
 
 int main() {
     optimize; 
     ll T = 1;
-    cin >> T;
+    //cin >> T;
     while(T--) {
         solve();
     }

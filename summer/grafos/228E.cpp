@@ -41,32 +41,64 @@ mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 // #endif
  
 /* -------------------------------- Solution starts below -------------------------------- */ 
-const ll MAXN = 2e5 + 10;
-ll a[MAXN];
-ll b[MAXN];
 
-void solve(){
-    ll n, cont, portempo, desligar;
-    cin >> n >> cont >> portempo >> desligar;
-    
-    a[0] = 0;
-    for (int i=1; i<=n; i++){
-        cin >> a[i];
+const ll MAXN = 1e3+10;
+ll a[MAXN];
+
+vector<pair<ll,int>> adj[MAXN];
+ll component[MAXN];
+
+void dfs(int u, int c){
+    if (component[u] and component[u] != c){
+        cout << "Impossible\n";
+        exit(0);
     }
-    for (int i=1; i<=n; i++){
-        cont -= min((a[i]-a[i-1])*portempo,desligar);
-        if (cont <= 0){
-            no();
-            return;
+    if (component[u]) return;
+    component[u] = c;
+
+    for (auto v:adj[u]){
+        if (v.second){
+            dfs(v.first, c);
+        }
+        else{
+            dfs(v.first, -c);
         }
     }
-    yes();
+}
+
+void solve(){
+    int n,m;
+    cin >> n >> m;
+    int a,b;
+    bool c;
+    for (int i=0; i<m; i++){
+        cin >> a >> b >> c;
+        a--,b--;
+        adj[a].push_back({b,c});
+        adj[b].push_back({a,c});
+    }
+
+    for (int i=0; i<n; i++){
+        if (!component[i]){
+            dfs(i, 1);
+        }
+    }
+    
+    vector<ll> resp;
+    for (int i=0; i<n; i++){
+        if (component[i] == 1) resp.push_back(i);
+    }
+    cout << resp.size() << endl;
+    for (int i=0; i<resp.size(); i++){
+        cout << resp[i]+1 << " ";
+    }
+    cout << endl;
 }
 
 int main() {
     optimize; 
     ll T = 1;
-    cin >> T;
+    //cin >> T;
     while(T--) {
         solve();
     }

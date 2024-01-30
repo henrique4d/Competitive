@@ -43,30 +43,34 @@ mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 /* -------------------------------- Solution starts below -------------------------------- */ 
 const ll MAXN = 2e5 + 10;
 ll a[MAXN];
-ll b[MAXN];
+ll mult[MAXN];
+
+bool visited[MAXN];
+
 
 void solve(){
-    ll n, cont, portempo, desligar;
-    cin >> n >> cont >> portempo >> desligar;
+    ll num = 0;
+    string s;
+    cin >> s;
+    ll resp = 1;
+    for (char c:s){
+
+        if (c >= '0' and c<='9') num = c-'0';
+        if (c >= 'a' and c <='z') num = c-'a'+36;
+        if (c >= 'A' and c <= 'Z') num = c-'A'+10;
+        if (c == '-') num = 62;
+        if (c == '_') num = 63;
+        resp *= (ll)pow(3, (6-__popcount(num)));
+        resp %=mod;
+    }
+    cout << resp << endl;
     
-    a[0] = 0;
-    for (int i=1; i<=n; i++){
-        cin >> a[i];
-    }
-    for (int i=1; i<=n; i++){
-        cont -= min((a[i]-a[i-1])*portempo,desligar);
-        if (cont <= 0){
-            no();
-            return;
-        }
-    }
-    yes();
 }
 
 int main() {
     optimize; 
     ll T = 1;
-    cin >> T;
+    //cin >> T;
     while(T--) {
         solve();
     }

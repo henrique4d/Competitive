@@ -21,7 +21,7 @@ typedef pair<ll,ll> pii;
 #define INF 0x3f3f3f3f
 #define INFLL 0x3f3f3f3f3f3f3f3fLL
  
-#define mod 1000000007LL
+#define mod 998244353LL
  
 #define f(i,s,e) for(long long ll i=s;i<e;i++)
 template <class T>
@@ -42,31 +42,39 @@ mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
  
 /* -------------------------------- Solution starts below -------------------------------- */ 
 const ll MAXN = 2e5 + 10;
-ll a[MAXN];
-ll b[MAXN];
+ll a[105][105];
 
 void solve(){
-    ll n, cont, portempo, desligar;
-    cin >> n >> cont >> portempo >> desligar;
-    
-    a[0] = 0;
-    for (int i=1; i<=n; i++){
-        cin >> a[i];
+    int n,m;
+    cin >> n >> m;
+
+    for (int i=0; i<n; i++){
+        for (int j=0; j<m; j++){
+            cin >> a[i][j];
+        }
     }
-    for (int i=1; i<=n; i++){
-        cont -= min((a[i]-a[i-1])*portempo,desligar);
-        if (cont <= 0){
-            no();
+    for (int tam = 1; tam <=n; tam++){
+        if (n%tam or __popcount(n/tam) != 1) continue;
+        bool pode = true;
+        for (int start = 0; start<n; start+= 2*tam){            
+            for (int i=0; i<tam; i++){
+                for (int j=0; j<m; j++){
+                    if (a[start+i][j] != a[start+2*tam-i -1 ][j]) pode = false;
+                }
+            }
+        }
+        if (pode){
+            cout << tam << endl;
             return;
         }
     }
-    yes();
+    cout << n << endl;
 }
 
 int main() {
     optimize; 
     ll T = 1;
-    cin >> T;
+    //cin >> T;
     while(T--) {
         solve();
     }

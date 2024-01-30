@@ -9,7 +9,7 @@ typedef long double ld;
 typedef pair<ll,ll> pii;
  
 #define optimize ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
-//#define endl "\n"
+#define endl "\n"
  
 #define fi first 
 #define se second 
@@ -19,9 +19,9 @@ typedef pair<ll,ll> pii;
 #define ms(x,a) memset(x,a,sizeof(x))
  
 #define INF 0x3f3f3f3f
-#define INFLL 0x3f3f3f3f3f3f3f3f
+#define INFLL 0x3f3f3f3f3f3f3f3fLL
  
-#define mod 998244353LL
+#define mod 1000000007LL
  
 #define f(i,s,e) for(long long ll i=s;i<e;i++)
 template <class T>
@@ -31,9 +31,9 @@ ll gcd(ll a,ll b) { if (b==0) return a; return gcd(b, a%b); }
 ll lcm(ll a,ll b) { return a/gcd(a,b)*b; }
 string to_upper(string a) { for (long long int i=0;i<(long long int)a.size();++i) if (a[i]>='a' && a[i]<='z') a[i]-='a'-'A'; return a; }
 string to_lower(string a) { for (long long int i=0;i<(long long int)a.size();++i) if (a[i]>='A' && a[i]<='Z') a[i]+='a'-'A'; return a; }
-void yes() { cout<<"Yes\n"; }
-//bool prime(ll a) { if (a==1) return 0; for (long long ll i=2;i<=round(sqrt(a));++i) if (a%i==0) return 0; return 1; }
-void no() { cout<<"No\n"; }
+void yes() { cout<<"YES\n"; }
+bool prime(ll a) { if (a==1) return 0; for (long long int i=2;i<=round(sqrt(a));++i) if (a%i==0) return 0; return 1; }
+void no() { cout<<"NO\n"; }
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
  
 //#define _DEBUG
@@ -41,45 +41,32 @@ mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 // #endif
  
 /* -------------------------------- Solution starts below -------------------------------- */ 
-const int MAXN = 2e5 + 10;
+const ll MAXN = 2e5 + 10;
 ll a[MAXN];
-ll fat[MAXN];
+ll b[MAXN];
 
 void solve(){
     int n;
     cin >> n;
-    int k;
-    int x;
-    set<int> s[n];
-    vector<vector<bool>> m(100, vector<bool>(100, 0));
-
-    set<int> resp;
+    char aux;
     for (int i=0; i<n; i++){
-        cin >> k;
-        for (int j=0; j<k; j++){
-            cin >> x;
-            resp.insert(x);
-            s[i].insert(x);
-            m[x][i] = true;
-        }
+        cin >> aux;
+        a[i] = aux - '0';
     }
-    ll best = 0;
-    
-    for (auto v:resp){
-        set<int> resp2;
-        for (int i=0; i<n; i++){
-            if (m[v][i]) continue;
-            for (auto val:s[i]){
-                resp2.insert(val);
-            }
-        }
-
-        best = max(best, (ll)resp2.size());
-    
+    for (int i=0; i<n; i++){
+        cin >> aux;
+        b[i] = aux - '0';
     }
-    cout << best << endl;
+    ll cont1 = 0;
+    ll cont2 = 0;
+    ll contdif = 0;
     
-     
+    for (int i=0; i<n; i++){
+        cont1 += a[i];
+        cont2 += b[i];
+        contdif += a[i]!=b[i];
+    }
+    cout << (contdif - abs(cont1 - cont2)+ 1)/2 + abs(cont1 - cont2) << endl;
 }
 
 int main() {

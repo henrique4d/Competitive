@@ -46,21 +46,53 @@ ll a[MAXN];
 ll b[MAXN];
 
 void solve(){
-    ll n, cont, portempo, desligar;
-    cin >> n >> cont >> portempo >> desligar;
-    
-    a[0] = 0;
-    for (int i=1; i<=n; i++){
-        cin >> a[i];
+    ll n,m;
+    ll xa, ya, xb,yb;
+    cin >> n >> m >> xa >> ya >> xb >> yb;
+
+    if (xb <= xa){
+        cout << "Draw\n";
+        return;
     }
-    for (int i=1; i<=n; i++){
-        cont -= min((a[i]-a[i-1])*portempo,desligar);
-        if (cont <= 0){
-            no();
-            return;
+    ll dist = xb-xa;
+    if (dist&1){
+        //alice ou empate
+        if (ya > yb){
+            ya = max(ya-dist/2, (ll)1);
+            yb = max(yb-(dist-1)/2, (ll)1);
+            if (abs(ya -yb) <=1){
+                cout << "Alice\n";
+            }
+            else cout << "Draw\n";
+        }
+        else{
+            ya = min(ya+dist/2, (ll)m);
+            yb = min(yb+(dist-1)/2, (ll)m);
+            if (abs(ya -yb) <=1){
+                cout << "Alice\n";
+            }
+            else cout << "Draw\n";
         }
     }
-    yes();
+    else{
+        if (yb > ya){
+            ya = max(ya-dist/2, (ll)1);
+            yb = max(yb-(dist-1)/2, (ll)1);
+            if (abs(ya -yb) <=1){
+                cout << "Bob\n";
+            }
+            else cout << "Draw\n";
+        }
+        else{
+            ya = min(ya+dist/2, (ll)m);
+            yb = min(yb+(dist-1)/2, (ll)m);
+            if (abs(ya -yb) <=1){
+                cout << "Bob\n";
+            }
+            else cout << "Draw\n";
+        }
+
+    }
 }
 
 int main() {

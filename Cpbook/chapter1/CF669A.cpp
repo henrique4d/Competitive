@@ -21,7 +21,7 @@ typedef pair<ll,ll> pii;
 #define INF 0x3f3f3f3f
 #define INFLL 0x3f3f3f3f3f3f3f3fLL
  
-#define mod 1000000007LL
+#define mod 998244353LL
  
 #define f(i,s,e) for(long long ll i=s;i<e;i++)
 template <class T>
@@ -43,30 +43,22 @@ mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 /* -------------------------------- Solution starts below -------------------------------- */ 
 const ll MAXN = 2e5 + 10;
 ll a[MAXN];
-ll b[MAXN];
+ll mult[MAXN];
+
+bool visited[MAXN];
+
 
 void solve(){
-    ll n, cont, portempo, desligar;
-    cin >> n >> cont >> portempo >> desligar;
-    
-    a[0] = 0;
-    for (int i=1; i<=n; i++){
-        cin >> a[i];
-    }
-    for (int i=1; i<=n; i++){
-        cont -= min((a[i]-a[i-1])*portempo,desligar);
-        if (cont <= 0){
-            no();
-            return;
-        }
-    }
-    yes();
+    int n;
+    cin >> n;
+    cout << (n/3)*2 + (n%3!=0) << endl;
+
 }
 
 int main() {
     optimize; 
     ll T = 1;
-    cin >> T;
+    //cin >> T;
     while(T--) {
         solve();
     }

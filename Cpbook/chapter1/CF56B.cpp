@@ -41,32 +41,44 @@ mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 // #endif
  
 /* -------------------------------- Solution starts below -------------------------------- */ 
-const ll MAXN = 2e5 + 10;
-ll a[MAXN];
-ll b[MAXN];
+
+
 
 void solve(){
-    ll n, cont, portempo, desligar;
-    cin >> n >> cont >> portempo >> desligar;
-    
-    a[0] = 0;
-    for (int i=1; i<=n; i++){
-        cin >> a[i];
+    int n;
+    cin >> n;
+    vector<ll> v(n);
+    ll ant = 0;
+    ll x = 0;
+    ll a = INFLL;
+    ll b = -1;
+    ll first = -1;
+    ll last = -1;
+    for (int i=0; i<n; i++){
+        cin >> v[i];
+        if (v[i] != i+1){
+            if (first == -1) first = i;
+            else last = i;
+        }
     }
-    for (int i=1; i<=n; i++){
-        cont -= min((a[i]-a[i-1])*portempo,desligar);
-        if (cont <= 0){
-            no();
+    if (last == -1){
+        cout << "0 0\n";
+        return;
+    }
+    for (int i=first; i<last; i++){
+        if (v[i] != v[i+1]+1){
+            cout << "0 0\n";
             return;
         }
     }
-    yes();
+    cout << v[last] << " " << v[first] << endl;
+
 }
 
 int main() {
     optimize; 
     ll T = 1;
-    cin >> T;
+    //cin >> T;
     while(T--) {
         solve();
     }

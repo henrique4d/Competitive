@@ -41,32 +41,46 @@ mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 // #endif
  
 /* -------------------------------- Solution starts below -------------------------------- */ 
-const ll MAXN = 2e5 + 10;
-ll a[MAXN];
-ll b[MAXN];
-
-void solve(){
-    ll n, cont, portempo, desligar;
-    cin >> n >> cont >> portempo >> desligar;
-    
-    a[0] = 0;
-    for (int i=1; i<=n; i++){
-        cin >> a[i];
-    }
-    for (int i=1; i<=n; i++){
-        cont -= min((a[i]-a[i-1])*portempo,desligar);
-        if (cont <= 0){
-            no();
-            return;
+const ll MAXN = 1e5 + 10;
+ll v[MAXN];
+ll cont = 0;
+void SieveOfEratosthenes(int n)
+{
+    // Create a boolean array "prime[0..n]" and initialize
+    // all entries it as true. A value in prime[i] will
+    // finally be false if i is Not a prime, else true.
+    bool prime[MAXN + 1];
+    memset(prime, true, sizeof(prime));
+ 
+    for (int p = 2; p * p <= n; p++) {
+        // If prime[p] is not changed, then it is a prime
+        if (prime[p] == true) {
+            // Update all multiples of p greater than or
+            // equal to the square of it numbers which are
+            // multiple of p and are less than p^2 are
+            // already been marked.
+            for (int i = p * p; i <= n; i += p)
+                prime[i] = false;
         }
     }
-    yes();
+ 
+    // Print all prime numbers
+    for (int p = 2; p <= n; p++)
+        if (prime[p]){
+            cout << p << ", ";
+            cont++;
+        }
+}
+
+void solve(){
+    SieveOfEratosthenes((ll)1e5+10);
+    cout << cont << endl;
 }
 
 int main() {
     optimize; 
     ll T = 1;
-    cin >> T;
+    //cin >> T;
     while(T--) {
         solve();
     }

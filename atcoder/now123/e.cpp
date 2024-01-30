@@ -9,7 +9,7 @@ typedef long double ld;
 typedef pair<ll,ll> pii;
  
 #define optimize ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
-#define endl "\n"
+// #define endl "\n"
  
 #define fi first 
 #define se second 
@@ -31,9 +31,9 @@ ll gcd(ll a,ll b) { if (b==0) return a; return gcd(b, a%b); }
 ll lcm(ll a,ll b) { return a/gcd(a,b)*b; }
 string to_upper(string a) { for (long long int i=0;i<(long long int)a.size();++i) if (a[i]>='a' && a[i]<='z') a[i]-='a'-'A'; return a; }
 string to_lower(string a) { for (long long int i=0;i<(long long int)a.size();++i) if (a[i]>='A' && a[i]<='Z') a[i]+='a'-'A'; return a; }
-void yes() { cout<<"YES\n"; }
+void yes() { cout<<"Yes\n"; }
 bool prime(ll a) { if (a==1) return 0; for (long long int i=2;i<=round(sqrt(a));++i) if (a%i==0) return 0; return 1; }
-void no() { cout<<"NO\n"; }
+void no() { cout<<"No\n"; }
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
  
 //#define _DEBUG
@@ -41,32 +41,57 @@ mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 // #endif
  
 /* -------------------------------- Solution starts below -------------------------------- */ 
-const ll MAXN = 2e5 + 10;
-ll a[MAXN];
-ll b[MAXN];
+
+const ll MAXN = 110;
+vector<ll> a[MAXN];
 
 void solve(){
-    ll n, cont, portempo, desligar;
-    cin >> n >> cont >> portempo >> desligar;
-    
-    a[0] = 0;
-    for (int i=1; i<=n; i++){
-        cin >> a[i];
+    ll n;
+    cin >> n;
+    ll tam = 1;
+    ll log = 0;
+    while (tam < n){
+        tam*=2;
+        log++;
     }
-    for (int i=1; i<=n; i++){
-        cont -= min((a[i]-a[i-1])*portempo,desligar);
-        if (cont <= 0){
-            no();
-            return;
+    cout << log << endl;
+    
+    for (int desloc = 0; desloc < log; desloc++){
+        for (int i=1; i<=n; i++){
+            if (i&(1<<desloc)){
+                a[desloc].push_back(i);
+            }
         }
     }
-    yes();
+
+    for (int i=0; i<log; i++){
+        cout << a[i].size();
+        for (int j=0; j<a[i].size(); j++){
+            cout << " " << a[i][j];
+        }
+        cout << endl;
+    }
+
+    string s;
+    cin >> s;
+
+    ll aux = 0;
+
+    for (int i=0; i<s.size(); i++){
+        if (s[i] == '1'){
+            aux = (aux|(1<<i));
+        }
+    }
+    if (aux == 0){
+        aux = n;
+    }
+    cout << aux << endl;
 }
 
 int main() {
-    optimize; 
+    //optimize; 
     ll T = 1;
-    cin >> T;
+    //cin >> T;
     while(T--) {
         solve();
     }
