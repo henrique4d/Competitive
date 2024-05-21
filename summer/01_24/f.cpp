@@ -1,28 +1,28 @@
 #include<bits/stdc++.h>
 using namespace std;
- 
+
 template<typename T> ostream& operator<<(ostream &os, const vector<T> &v) { os << "{"; for (typename vector<T>::const_iterator vi = v.begin(); vi != v.end(); ++vi) { if (vi != v.begin()) os << ", "; os << *vi; } os << "}"; return os; }
 template<typename A, typename B> ostream& operator<<(ostream &os, const pair<A, B> &p) { os << '(' << p.first << ", " << p.second << ')'; return os; }
- 
+
 typedef long long ll;
 typedef long double ld;
 typedef pair<ll,ll> pii;
- 
+
 #define optimize ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
 #define endl "\n"
- 
+
 #define fi first 
 #define se second 
 #define pb push_back
- 
+
 #define all(x) x.begin(),x.end()
 #define ms(x,a) memset(x,a,sizeof(x))
- 
+
 #define INF 0x3f3f3f3f
 #define INFLL 0x3f3f3f3f3f3f3f3f
- 
+
 #define mod 998244353LL
- 
+
 #define f(i,s,e) for(long long ll i=s;i<e;i++)
 template <class T>
 void prll_v(vector<T> &v) { cout << "{"; for (auto x : v) cout << x << ","; cout << "\b}\n"; }
@@ -35,38 +35,21 @@ void yes() { cout<<"YES\n"; }
 //bool prime(ll a) { if (a==1) return 0; for (long long ll i=2;i<=round(sqrt(a));++i) if (a%i==0) return 0; return 1; }
 void no() { cout<<"NO\n"; }
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
-// Common file
 
-// Header files, namespaces, 
 //#define _DEBUG
 // #ifdef _DEBUG
 // #endif
- 
+
 /* -------------------------------- Solution starts below -------------------------------- */ 
-
-const ll MAXN = 1000;
-ll a[3][MAXN];
-ll neg[3][MAXN];
-ll pos[3][MAXN];
-ll n;
-
-
-// 2-SAT
-//
-// solve() retorna um par, o first fala se eh possivel
-// atribuir, o second fala se cada variavel eh verdadeira
-//
-// O(|V|+|E|) = O(#variaveis + #restricoes)
-
 struct sat {
 	int n, tot;
 	vector<vector<int>> g;
 	vector<int> vis, comp, id, ans;
 	stack<int> s;
-
+ 
 	sat() {}
 	sat(int n_) : n(n_), tot(n), g(2*n) {}
-
+ 
 	int dfs(int i, int& t) {
 		int lo = id[i] = t++;
 		s.push(i), vis[i] = 2;
@@ -82,7 +65,7 @@ struct sat {
 		}
 		return lo;
 	}
-
+ 
 	void add_impl(int x, int y) { // x -> y = !x ou y
 		x = x >= 0 ? 2*x : -2*x-1;
 		y = y >= 0 ? 2*y : -2*y-1;
@@ -112,7 +95,7 @@ struct sat {
 		}
 		tot += v.size();
 	}
-
+ 
 	pair<bool, vector<int>> solve() {
 		ans = vector<int>(n, -1);
 		int t = 0;
@@ -123,39 +106,100 @@ struct sat {
 		return {true, ans};
 	}
 };
+const int MAXN = 550;
+int n,m;
+char tab[MAXN][MAXN];
+
+void init(){
+    for (int i=0; i<MAXN; i++){
+        for (int j=0; j<MAXN; j++){
+            tab[i][j] = '.';
+        }
+    }
+}
+
+int conv(int i, int j, int d){
+    return i*(m+5)+j + (n+5)*(m+5)*d;
+}
 
 void solve(){
-    cin >> n;
-    for (int i=0; i<3; i++){
-        for (int j=0; j<n; j++ ){
-            cin >> a[i][j];
-			if (a[i][j] > 0) pos[i][j] = a[i][j];
-			else pos[i][j] = ~abs(a[i][j]);
-			neg[i][j] = ~pos[i][j];
-		}
+    cin >> n >> m;
+    for (int i=1; i<=n; i++){
+        for (int j=1; j<=m; j++){
+            cin >> tab[i][j];
+        }
     }
-    sat S(n+30);
 
-	for (int j=0; j<n; j++){
-		S.add_impl(neg[0][j], pos[1][j]);
-		S.add_impl(neg[0][j], pos[2][j]);
+    sat S((n+5)*(m+5)*10);
+    int contblack = 0;
+    int contwite = 0;
+    for (int i=1; i<=n; i++){
+        for (int j=1; j<=m; j++){
+            if (tab[i][j] == '.') continue;
+            if (tab[i][j] == 'B'){
+                contblack++;
+                if (tab[i-1][j]!='W' and tab[i+1][j]!='W'){
+                    no();
+                    return;
+                }
+                if (tab[i-1][j]=='W' and tab[i+1][j]!='W'){
+                    S.add_true(conv(i,j,0));
+                }
+                if (tab[i-1][j]!='W' and tab[i+1][j]=='W'){
+                    S.add_true(conv(i,j,2));
+                }
+                if (tab[i-1][j]=='W' and tab[i+1][j]=='W'){
+                    S.add_xor(conv(i,j,0),conv(i,j,2));
+                }
 
-		S.add_impl(neg[1][j], pos[0][j]);
-		S.add_impl(neg[1][j], pos[2][j]);
-		
-		S.add_impl(neg[2][j], pos[0][j]);
-		S.add_impl(neg[2][j], pos[1][j]);
-	}
+                if (tab[i][j-1]!='W' and tab[i][j+1]!='W'){
+                    no();
+                    return;
+                }
+                if (tab[i][j-1]=='W' and tab[i][j+1]!='W'){
+                    S.add_true(conv(i,j,1));
+                }
+                if (tab[i][j-1]!='W' and tab[i][j+1]=='W'){
+                    S.add_true(conv(i,j,3));
+                }
+                if (tab[i][j-1]=='W' and tab[i][j+1]=='W'){
+                    S.add_xor(conv(i,j,1),conv(i,j,3));
+                }
+            }
+            if (tab[i][j] == 'W'){
+                contwite++;
+                conv(i-1,j,2);
+                conv(i+1,j,0);
+                conv(i,j-1,3);
+                conv(i,j+1,1);
+                
+                S.add_impl(conv(i-1,j,2), ~conv(i+1,j,0));
+                S.add_impl(conv(i-1,j,2), ~conv(i,j-1,3));
+                S.add_impl(conv(i-1,j,2), ~conv(i,j+1,1));
 
-	if (S.solve().first) yes();
-	else no();	
+                S.add_impl(conv(i+1,j,0), ~conv(i-1,j,2));
+                S.add_impl(conv(i+1,j,0), ~conv(i,j-1,3));
+                S.add_impl(conv(i+1,j,0), ~conv(i,j+1,1));
+                
+                S.add_impl(conv(i,j-1,3), ~conv(i-1,j,2));
+                S.add_impl(conv(i,j-1,3), ~conv(i+1,j,0));
+                S.add_impl(conv(i,j-1,3), ~conv(i,j+1,1));
+                
+                S.add_impl(conv(i,j+1,1), ~conv(i-1,j,2));
+                S.add_impl(conv(i,j+1,1), ~conv(i+1,j,0));
+                S.add_impl(conv(i,j+1,1), ~conv(i,j-1,3));    
+            }
+        }
+    }
+    if (contblack*2 == contwite and S.solve().first) yes();
+    else no();
+
 }
- 
+
 int main() {
     optimize; 
-    
     ll T = 1;
-    cin >> T;
+    //cin >> T;
     while(T--) {
         solve();
     }

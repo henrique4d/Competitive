@@ -1,28 +1,28 @@
 #include<bits/stdc++.h>
 using namespace std;
- 
+
 template<typename T> ostream& operator<<(ostream &os, const vector<T> &v) { os << "{"; for (typename vector<T>::const_iterator vi = v.begin(); vi != v.end(); ++vi) { if (vi != v.begin()) os << ", "; os << *vi; } os << "}"; return os; }
 template<typename A, typename B> ostream& operator<<(ostream &os, const pair<A, B> &p) { os << '(' << p.first << ", " << p.second << ')'; return os; }
- 
+
 typedef long long ll;
 typedef long double ld;
 typedef pair<ll,ll> pii;
- 
+
 #define optimize ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
 #define endl "\n"
- 
+
 #define fi first 
 #define se second 
 #define pb push_back
- 
+
 #define all(x) x.begin(),x.end()
 #define ms(x,a) memset(x,a,sizeof(x))
- 
+
 #define INF 0x3f3f3f3f
 #define INFLL 0x3f3f3f3f3f3f3f3f
- 
+
 #define mod 998244353LL
- 
+
 #define f(i,s,e) for(long long ll i=s;i<e;i++)
 template <class T>
 void prll_v(vector<T> &v) { cout << "{"; for (auto x : v) cout << x << ","; cout << "\b}\n"; }
@@ -35,38 +35,21 @@ void yes() { cout<<"YES\n"; }
 //bool prime(ll a) { if (a==1) return 0; for (long long ll i=2;i<=round(sqrt(a));++i) if (a%i==0) return 0; return 1; }
 void no() { cout<<"NO\n"; }
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
-// Common file
 
-// Header files, namespaces, 
 //#define _DEBUG
 // #ifdef _DEBUG
 // #endif
- 
+
 /* -------------------------------- Solution starts below -------------------------------- */ 
-
-const ll MAXN = 1000;
-ll a[3][MAXN];
-ll neg[3][MAXN];
-ll pos[3][MAXN];
-ll n;
-
-
-// 2-SAT
-//
-// solve() retorna um par, o first fala se eh possivel
-// atribuir, o second fala se cada variavel eh verdadeira
-//
-// O(|V|+|E|) = O(#variaveis + #restricoes)
-
 struct sat {
 	int n, tot;
 	vector<vector<int>> g;
 	vector<int> vis, comp, id, ans;
 	stack<int> s;
-
+ 
 	sat() {}
 	sat(int n_) : n(n_), tot(n), g(2*n) {}
-
+ 
 	int dfs(int i, int& t) {
 		int lo = id[i] = t++;
 		s.push(i), vis[i] = 2;
@@ -82,7 +65,7 @@ struct sat {
 		}
 		return lo;
 	}
-
+ 
 	void add_impl(int x, int y) { // x -> y = !x ou y
 		x = x >= 0 ? 2*x : -2*x-1;
 		y = y >= 0 ? 2*y : -2*y-1;
@@ -112,7 +95,7 @@ struct sat {
 		}
 		tot += v.size();
 	}
-
+ 
 	pair<bool, vector<int>> solve() {
 		ans = vector<int>(n, -1);
 		int t = 0;
@@ -125,37 +108,41 @@ struct sat {
 };
 
 void solve(){
-    cin >> n;
-    for (int i=0; i<3; i++){
-        for (int j=0; j<n; j++ ){
-            cin >> a[i][j];
-			if (a[i][j] > 0) pos[i][j] = a[i][j];
-			else pos[i][j] = ~abs(a[i][j]);
-			neg[i][j] = ~pos[i][j];
-		}
+    int n,m;
+    cin >> n >> m;
+    sat S(n);
+    int a,b,c;
+    for (int i=0; i<m; i++){
+        cin >> a >> b >> c;
+        a--,b--;
+        if (c){
+            S.add_impl(a,b);
+            S.add_impl(b,a);
+        }
+        else{
+            S.add_xor(a,b);
+        }
     }
-    sat S(n+30);
+    auto [poss, solution] = S.solve();
 
-	for (int j=0; j<n; j++){
-		S.add_impl(neg[0][j], pos[1][j]);
-		S.add_impl(neg[0][j], pos[2][j]);
-
-		S.add_impl(neg[1][j], pos[0][j]);
-		S.add_impl(neg[1][j], pos[2][j]);
-		
-		S.add_impl(neg[2][j], pos[0][j]);
-		S.add_impl(neg[2][j], pos[1][j]);
-	}
-
-	if (S.solve().first) yes();
-	else no();	
+    vector<int> resp;
+    if (poss){
+        for (int i=0; i<n; i++){
+            if (solution[i]) resp.push_back(i);
+        }
+        cout << resp.size() << endl;
+        for (int i=0; i<resp.size(); i++){
+            cout << resp[i]+1 << " ";
+        }
+        cout << endl;
+    }
+    else cout << "Impossible\n";
 }
- 
+
 int main() {
     optimize; 
-    
     ll T = 1;
-    cin >> T;
+    //cin >> T;
     while(T--) {
         solve();
     }
