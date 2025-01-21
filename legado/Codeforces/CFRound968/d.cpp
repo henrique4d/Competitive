@@ -1,0 +1,142 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+template<typename T> ostream& operator<<(ostream &os, const vector<T> &v) { os << "{"; for (typename vector<T>::const_iterator vi = v.begin(); vi != v.end(); ++vi) { if (vi != v.begin()) os << ", "; os << *vi; } os << "}"; return os; }
+template<typename A, typename B> ostream& operator<<(ostream &os, const pair<A, B> &p) { os << '(' << p.first << ", " << p.second << ')'; return os; }
+
+typedef long long ll;
+typedef long double ld;
+typedef pair<ll,ll> pii;
+
+#define optimize ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
+#define endl "\n"
+
+#define fi first 
+#define se second 
+#define pb push_back
+
+#define ms(x,a) memset(x,a,sizeof(x))
+#define all(x) x.begin(),x.end()
+
+#define INF 0x3f3f3f3f
+#define INFLL 0x3f3f3f3f3f3f3f3f
+
+#define mod 998244353LL
+
+// #define f(i,s,e) for(long long ll i=s;i<e;i++)
+template <class T>
+void prll_v(vector<T> &v) { cout << "{"; for (auto x : v) cout << x << ","; cout << "\b}\n"; }
+#define MOD 998244353LL
+ll gcd(ll a,ll b) { if (b==0) return a; return gcd(b, a%b); }
+ll lcm(ll a,ll b) { return a/gcd(a,b)*b; }
+string to_upper(string a) { for (long long int i=0;i<(long long int)a.size();++i) if (a[i]>='a' && a[i]<='z') a[i]-='a'-'A'; return a; }
+string to_lower(string a) { for (long long int i=0;i<(long long int)a.size();++i) if (a[i]>='A' && a[i]<='Z') a[i]+='a'-'A'; return a; }
+void yes() { cout<<"Yes\n"; }
+//bool prime(ll a) { if (a==1) return 0; for (long long ll i=2;i<=round(sqrt(a));++i) if (a%i==0) return 0; return 1; }
+void no() { cout<<"No\n"; }
+mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
+
+//#define _DEBUG
+// #ifdef _DEBUG
+// #endif
+
+/* -------------------------------- Solution starts below -------------------------------- */ 
+
+const ll MAXN = 4e5+10;
+vector<ll> mex1[MAXN];
+ll mex2[MAXN];
+vector<ll> values[MAXN];
+ll dp[MAXN];
+ll n,m,k, limite;
+
+void init(){
+    for (int i=0; i<limite; i++){
+        mex1[i].clear();
+        mex2[i] = 0;
+        dp[i] = -1;
+    }
+    for (int i=0; i<n+10; i++){
+        values[i].clear();
+    }
+}
+
+ll mex(vector<ll> &numberArray) {
+    sort(numberArray.begin(), numberArray.end());
+    int mex = 0;
+    for(int e : numberArray) {
+        if (e == mex) {
+            mex++;
+        }
+    }
+    return mex;
+}
+
+ll DP(ll pos){
+    if (pos >= limite){
+        return INFLL;
+    }
+    if (dp[pos] != -1) return dp[pos];
+    ll best = pos;
+    for (auto x:mex1[pos]){
+        best = max(best, DP(mex2[x]));
+    }
+    return dp[pos] = best;
+}
+
+void solve(){
+    limite = 0;
+    cin >> n >> m;
+    ll maior_mex = 0;
+    set<int> possiveisMex1;
+
+    for (ll i=0; i<n; i++){
+        cin >> k;
+        limite += 2*k;
+        values[i].resize(k);
+        for (ll j=0; j<k; j++){
+            cin >> values[i][j];
+        }
+        ll mexAux = mex(values[i]);
+        maior_mex = max(maior_mex, mexAux);
+        possiveisMex1.insert(mexAux);
+
+        mex1[mexAux].push_back(i);
+        values[i].push_back(mexAux);
+        mex2[i] = mex(values[i]);
+    }
+    limite += 5;
+    for (int i=0; i<limite; i++){
+        dp[i] = -1;
+    }
+    
+    ll i = 0;
+    ll resp = 0;
+    ll best = 0;
+    for (auto x:possiveisMex1){
+        best = max(best,DP(x));
+    }
+    
+    for (; i<limite and i<=m; i++){
+        best = max(best, DP(i));
+        resp += best;
+    }
+    
+    if (m >= limite){
+        resp += (min(m,best) - limite) * best;
+        limite = min(m,best);    
+        if (m >= limite) resp += ((m + limite)*(m-limite+1))/2;
+    }
+
+    cout << resp << endl;
+    init();
+}
+
+int main() {
+    optimize;
+    ll T = 1;
+    cin >> T;
+    while(T--) {
+        solve();
+    }
+    return 0;
+}
